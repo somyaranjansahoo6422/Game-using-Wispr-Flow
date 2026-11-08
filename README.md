@@ -1,98 +1,130 @@
+# ✈️ VECTOR: Tactical Air Combat (built by voice with Wispr Flow)
+
+**VECTOR** is a browser-based **3D tactical air-combat prototype** powered by a **Python FastAPI** backend and a **Three.js** front end. Pick your jet (F-35 or Su-57) and a theatre, launch a round, then intercept hostile aircraft and neutralise fictional enemy sites while keeping your aircraft alive.
+
+The project was **built using voice dictation** with [Wispr Flow](https://ref.wisprflow.ai/hhg): the code was spoken, not typed. It started life as **VECTOR ATC**, a voice-controlled air-traffic-control radar simulator, and has since evolved into this combat prototype.
+
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-backend-009688?logo=fastapi&logoColor=white)
+![Three.js](https://img.shields.io/badge/Three.js-r128-black?logo=three.js)
+![Built with](https://img.shields.io/badge/Built%20by%20voice-Wispr%20Flow-7c3aed)
+
+<p align="center">
+  <img src="demo.png" alt="VECTOR 3D scene (earlier ATC build)" width="800">
+</p>
+<p align="center"><sub>Screenshot from the earlier VECTOR ATC build.</sub></p>
 
 ---
 
-# VECTOR ✈️🎙️
+## ✨ Features
 
-> **A voice-built, voice-played Air Traffic Control radar simulator.**  
-> Built entirely using voice dictation via [Wispr Flow](https://ref.wisprflow.ai/hhg).
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com/)
-
----
-
-## 💡 The Premise
-
-Air traffic control is one of the only professions on Earth that runs almost exclusively on voice. **VECTOR** embraces that constraint end-to-end:
-
-1. **Voice-Built:** Every line of backend logic, regex parsing, Canvas math, and CRT styling was constructed on camera using **Wispr Flow** push-to-talk dictation. The keyboard was strictly reserved for `Enter`, `Tab`, and window navigation.
-2. **Voice-Played:** Once built, aircraft on the scope are guided exclusively through spoken ATC phraseology and callsigns.
+- **Two jets** with different handling and loadouts
+  - **Lockheed Martin F-35:** stealth multirole (speed 1.25 · turn 1.18 · 5 weapons)
+  - **Sukhoi Su-57:** air-superiority multirole (speed 1.38 · turn 1.30 · 6 weapons)
+- **Three theatres**, each with its own terrain, sky, fog and objective set
+  - **Caucasus:** mountain frontier
+  - **Persian Gulf:** desert coast / carrier approach
+  - **Black Sea & Georgia:** coastal mountains / maritime
+- **Objective-driven rounds:** intercept 5 hostile aircraft, protect a friendly asset, destroy 3 hostile sites, with live progress text
+- **Real-time battlefield:** an async server loop (every 80 ms) moves your jet and the hostiles; flying too close to enemies triggers missile warnings and damage
+- **HUD:** score, round, health, ammo, current objective and status messages
+- **Weapons:** each shot uses 10% ammo; targets within range take damage (**+250** per kill, **+1000** for winning the round)
+- **Victory screen** with a "Fly Again" button
+- **3D scene in Three.js:** terrain, shadows, animated aircraft, exhaust, plus crew cards for the pilot **KAI**, the WSO **NOVA** and the squadron cat **JET** 🐈
 
 ---
 
-## 🌟 Key Features
+## 🎮 Controls
 
-- **Cathode Ray Tube (CRT) Scope Display:** High-contrast tactical radar scope featuring a 15° fading conical sweep beam, phosphor trails, concentric range rings (15/30/45 NM), and dogleg data blocks.
-- **Realistic Kinematics & Time Compression:** Runs at 12× real-world speed (6 seconds of simulated flight time per 0.5s tick) with realistic turn limits (9°/tick) and vertical climb/descent ceilings (150 ft/tick).
-- **Separation Assurance & Conflict Detection:** Automatically flags aircraft violating standard radar separation minima (< 3 NM horizontal and < 1,000 FT vertical) with flashing data blocks, visual conflict vectors, and an 800 Hz CRT audio ping.
-- **Forgiving Voice Normalizer & Parser:** Robustly cleans spoken input, maps numbers (`niner`, `to/two`), stitches spaced digits (`"4 2 1"` → `421`), and handles Flight Levels (`FL 120` → `12,000 FT`).
-- **Scored Exit Gates:** Perimeter exit gates with strict altitude arrival gates (`Gate North @ 5,000 FT`, `Gate East @ 10,000 FT`, `Gate South @ 15,000 FT`, `Gate West @ 20,000 FT`).
-- **Pilot Voice Readback:** Emits real-time auditory confirmation using the browser's native Web Speech synthesis API.
-
----
-
-## 🛠️ Architecture & Tech Stack
-
-- **Backend:** Python 3.11+, [FastAPI](https://fastapi.tiangolo.com/), and [Uvicorn](https://www.uvicorn.org/).
-- **Simulation Loop:** Asynchronous background loop running non-blocking dead reckoning and pair-wise collision math.
-- **Frontend:** Single-file zero-dependency HTML5 Canvas, Web Audio API, and Web Speech API.
-- **Voice Ingestion:** [Wispr Flow](https://ref.wisprflow.ai/hhg).
+| Input | Action |
+| --- | --- |
+| `←` / `→` or ◀ LEFT / RIGHT ▶ | Turn |
+| `↑` / `↓` or ▲ CLIMB / ▼ DIVE | Climb / dive |
+| `Space` or **FIRE WEAPON** | Fire at the nearest target |
+| **F-35 / SU-57** | Select jet |
+| **CAUCASUS / PERSIAN GULF / BLACK SEA** | Select theatre |
+| **LAUNCH ROUND** | Start a new round |
 
 ---
 
-## 🚀 Quickstart
+## 🚀 Getting Started
 
-### 1. Prerequisites
-- Python 3.11 or newer
-- [Wispr Flow](https://ref.wisprflow.ai/hhg) installed and configured to **Push-to-Talk**.
+**Requirements:** Python 3.11+ and an internet connection (Three.js loads from a CDN).
 
-### 2. Installation
 ```bash
-# Clone the repository
-git clone 'https://github.com/Somya6422/vector-atc.git'
-cd vector-atc
+# 1. Clone this branch of the repository
+git clone -b vector-atc https://github.com/somyaranjansahoo6422/Game-using-Wispr-Flow.git
+cd Game-using-Wispr-Flow
 
-# Create and activate virtual environment
+# 2. Create and activate a virtual environment (recommended)
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+venv\Scripts\activate          # Windows
+# source venv/bin/activate     # macOS / Linux
 
-# Install dependencies
+# 3. Install dependencies
 pip install -r requirements.txt
 
-```
-
-### 3. Run the Simulator
-
-```bash
+# 4. Run the server
 uvicorn app:app --reload --host 127.0.0.1 --port 8000
-
 ```
 
-Open **`http://localhost:8000`** in your browser.
-
-*(Note: Click anywhere on the radar scope once to unlock browser audio for conflict alarm pings).*
+Then open **http://127.0.0.1:8000** in your browser.
 
 ---
 
-## 🎙️ Spoken ATC Clearances
+## 🧱 Architecture
 
-Click into the command bar (or leave it focused) and hold your Wispr Flow push-to-talk hotkey:
+```
+Browser (Three.js scene + HUD)  ──GET /api/state──▶  FastAPI (app.py)
+            ▲                    ──POST /api/command─▶  • game state (jet, theatre, enemies, bases)
+            └──────── JSON ◀─────────────────────────   • async game loop (80 ms tick)
+                                                        • command handler (select / launch / maneuver / fire / reset)
+```
 
-| Desired Action | Spoken ATC Phraseology Example |
-| --- | --- |
-| **Heading Change** | *"Indigo 421, turn left heading 270"* |
-| **Flight Level** | *"Vistara 60, climb flight level 240"* |
-| **Direct Altitude** | *"Vector 2, descend 5000"* |
-| **Speed Adjustment** | *"Speedbird 11, maintain speed 220"* |
-| **Gate Clearance** | *"Indigo 421, proceed gate east"* |
-| **Compound Clearance** | *"Indigo 421, heading 180, climb flight level 150"* |
-
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/` | GET | Serves the single-page 3D game |
+| `/api/state` | GET | Full game state, jet info, theatre info, objective and progress |
+| `/api/command` | POST | `{ "action": "select_jet" \| "select_theater" \| "launch" \| "maneuver" \| "fire" \| "reset", "value": "..." }` |
 
 ---
 
-## 📄 License
+## 🎙️ Built by Voice
 
-Distributed under the [MIT License](https://www.google.com/search?q=LICENSE).
+Every part of VECTOR was dictated using **Wispr Flow** push-to-talk; the keyboard was reserved for `Enter`, `Tab` and navigation. See [`RUN_SHEET.md`](RUN_SHEET.md) for the recording plan and spoken build prompts.
+
+---
+
+## 📂 Project Structure
 
 ```
+Game-using-Wispr-Flow/  (branch vector-atc)
+├── app.py            # FastAPI backend + embedded HTML/JS front end
+├── requirements.txt  # fastapi, uvicorn
+├── RUN_SHEET.md      # voice-build recording run sheet
+├── demo.png          # screenshot (earlier ATC build)
+└── briefing.png      # screenshot (earlier ATC build)
+```
+
+---
+
+## 🔮 Roadmap
+
+- Drop-in high-fidelity GLB models for jets and maps (`static/assets/jets/*.glb`, `static/assets/maps/*.glb`)
+- Voice commands for flight and weapons
+- Enemy AI that pursues and evades
+- Multiple rounds with rising difficulty
+
+---
+
+## ⚠️ Disclaimer
+
+All locations, targets and scenarios are **fictional** and intended purely for entertainment; this is not a real-world combat or flight model.
+
+---
+
+## 👤 Author
+
+**Somya Ranjan Sahoo** · [GitHub](https://github.com/somyaranjansahoo6422) · [Portfolio](https://somyaranjansahoo6422.github.io/projects/vector/)
+
+Built with ❤️ and [Wispr Flow](https://ref.wisprflow.ai/hhg).
